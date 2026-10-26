@@ -1,0 +1,32 @@
+{% extends "core/dashboard_base.html" %}
+
+{% block title %}Add a course | Capacity Connect{% endblock %}
+{% block dashboard_heading %}Add a course{% endblock %}
+
+{% block dashboard_content %}
+<section class="dashboard-panel" aria-labelledby="course-form-title">
+    <div class="dashboard-panel-heading">
+        <div><p class="section-kicker">Course management</p><h2 id="course-form-title">Create a course</h2></div>
+    </div>
+    <p class="admin-form-intro">Set the course details and the maximum number of learners it can accept. Available seats update automatically as learners enroll.</p>
+    <form method="post" class="admin-course-form" novalidate>
+        {% csrf_token %}
+        {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
+        {% for field in form %}
+        <div class="{% if field.field.widget.input_type == 'checkbox' %}form-check admin-checkbox{% else %}auth-field{% endif %}">
+            {% if field.field.widget.input_type == 'checkbox' %}
+                {{ field }}<label for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% else %}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}
+            {% endif %}
+            {% if field.help_text %}<div class="field-help">{{ field.help_text }}</div>{% endif %}
+            {% for error in field.errors %}<p class="field-error" role="alert">{{ error }}</p>{% endfor %}
+        </div>
+        {% endfor %}
+        <div class="admin-form-actions">
+            <button class="button button-primary" type="submit">Create course</button>
+            <a class="text-link" href="{% url 'core:administrator_dashboard' %}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "core/base.html" %}
+
+{% block title %}Courses | Capacity Connect{% endblock %}
+
+{% block content %}
+<section class="catalogue-section section-pad">
+    <div class="container">
+        <p class="section-kicker">Find your next step</p>
+        <div class="section-heading catalogue-heading">
+            <div><h1>Explore <span>courses.</span></h1></div>
+            <p>Practical learning to help you build skills and move forward.</p>
+        </div>
+        {% if courses %}
+        <div class="course-grid">
+            {% for course in courses %}
+            <article class="course-card">
+                <div class="course-card-meta"><span>{{ course.category }}</span><span>{{ course.get_level_display }}</span></div>
+                <h2><a href="{% url 'core:course_detail' course.slug %}">{{ course.title }}</a></h2>
+                <p>{{ course.summary }}</p>
+                <div class="course-card-bottom"><span>{{ course.available_slots }} seat{{ course.available_slots|pluralize }} available</span><a href="{% url 'core:course_detail' course.slug %}" aria-label="View {{ course.title }}">View course <span aria-hidden="true">→</span></a></div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="course-empty">
+            <h2>No courses published yet.</h2>
+            <p>Check back soon for new learning opportunities.</p>
+        </div>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

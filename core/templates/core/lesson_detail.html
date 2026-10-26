@@ -1,0 +1,36 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ lesson.title }} | {{ lesson.course.title }}{% endblock %}
+
+{% block content %}
+<section class="lesson-page section-pad">
+    <div class="container lesson-container">
+        <a class="text-link course-back-link" href="{% url 'core:course_detail' lesson.course.slug %}"><span aria-hidden="true">←</span> Back to {{ lesson.course.title }}</a>
+        <article class="lesson-content-card">
+            <div class="course-card-meta">
+                <span>{{ lesson.course.category }}</span>
+                <span>Lesson {{ lesson.order }}</span>
+                <span>{{ lesson.duration_minutes }} min read</span>
+            </div>
+            <h1>{{ lesson.title }}</h1>
+            <div class="lesson-body">{{ lesson.content|linebreaks }}</div>
+        </article>
+        <nav class="lesson-pagination" aria-label="Course lesson navigation">
+            {% if previous_lesson %}
+            <a class="lesson-pagination-link" href="{% url 'core:lesson_detail' lesson.course.slug previous_lesson.pk %}">
+                <span>← Previous lesson</span><strong>{{ previous_lesson.title }}</strong>
+            </a>
+            {% else %}<span></span>{% endif %}
+            {% if next_lesson %}
+            <a class="lesson-pagination-link lesson-next-link" href="{% url 'core:lesson_detail' lesson.course.slug next_lesson.pk %}">
+                <span>Next lesson →</span><strong>{{ next_lesson.title }}</strong>
+            </a>
+            {% else %}
+            <a class="lesson-pagination-link lesson-next-link" href="{% url 'core:course_detail' lesson.course.slug %}">
+                <span>Course complete</span><strong>Return to course overview</strong>
+            </a>
+            {% endif %}
+        </nav>
+    </div>
+</section>
+{% endblock %}

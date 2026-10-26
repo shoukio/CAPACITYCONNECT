@@ -1,0 +1,30 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ page_title }} | Capacity Connect{% endblock %}
+
+{% block content %}
+<section class="auth-section section-pad">
+    <div class="auth-card">
+        <p class="section-kicker">Capacity Connect</p>
+        <h1>{{ page_title }}</h1>
+        <p class="auth-description">{{ page_description }}</p>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% for hidden in form.hidden_fields %}{{ hidden }}{% endfor %}
+            {% if form.non_field_errors %}
+            <div class="form-errors" role="alert">{{ form.non_field_errors }}</div>
+            {% endif %}
+            {% for field in form.visible_fields %}
+            <div class="auth-field">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {{ field }}
+                {% if field.help_text %}<div class="field-help">{{ field.help_text|safe }}</div>{% endif %}
+                {% for error in field.errors %}<p class="field-error" role="alert">{{ error }}</p>{% endfor %}
+            </div>
+            {% endfor %}
+            <button class="button button-primary auth-submit" type="submit">{{ submit_label }}</button>
+        </form>
+        {% block auth_links %}{% endblock %}
+    </div>
+</section>
+{% endblock %}

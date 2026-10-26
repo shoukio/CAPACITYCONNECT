@@ -1,0 +1,38 @@
+{% extends "core/base.html" %}
+
+{% block content %}
+<section class="dashboard-section">
+    <div class="container dashboard-container">
+        <header class="dashboard-topbar">
+            <button class="dashboard-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardSidebar" aria-controls="dashboardSidebar" aria-expanded="true" aria-label="Toggle dashboard menu">
+                <span aria-hidden="true">☰</span><span>Menu</span>
+            </button>
+            <div>
+                <p class="section-kicker">Your learning space</p>
+                <h1>{% block dashboard_heading %}Dashboard{% endblock %}</h1>
+            </div>
+            <div class="dashboard-user">
+                <span class="dashboard-avatar" aria-hidden="true">{{ user.get_username|first|upper }}</span>
+                <span><strong>{{ user.get_full_name|default:user.get_username }}</strong><small>{{ user.profile.get_role_display }}</small></span>
+            </div>
+        </header>
+        <div class="dashboard-layout">
+            <aside class="dashboard-sidebar collapse show" id="dashboardSidebar" aria-label="Dashboard navigation">
+                <p class="dashboard-sidebar-label">Workspace</p>
+                <a class="dashboard-side-link active" href="{% url 'core:dashboard' %}" aria-current="page"><span aria-hidden="true">⌂</span> Overview</a>
+                <a class="dashboard-side-link" href="{% url 'core:course_list' %}"><span aria-hidden="true">▤</span> Browse courses</a>
+                {% if user.is_staff %}
+                <a class="dashboard-side-link" href="{% url 'admin:index' %}"><span aria-hidden="true">⚙</span> Administration</a>
+                {% endif %}
+                <div class="dashboard-sidebar-note">
+                    <span aria-hidden="true">✳</span>
+                    <p>Small steps make meaningful progress.</p>
+                </div>
+            </aside>
+            <div class="dashboard-content">
+                {% block dashboard_content %}{% endblock %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}

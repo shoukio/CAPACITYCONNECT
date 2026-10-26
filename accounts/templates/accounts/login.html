@@ -1,0 +1,12 @@
+{% extends "accounts/auth_base.html" %}
+
+{% block auth_links %}
+{% if auth_page == "administrator_login" %}
+<p class="auth-alternative"><a href="{% url 'accounts:password_reset' %}">Forgot your password?</a></p>
+<p class="auth-alternative">Not an administrator? <a href="{% url 'accounts:login' %}">Use learner sign in</a></p>
+{% else %}
+<p class="auth-alternative"><a href="{% url 'accounts:password_reset' %}">Forgot your password?</a></p>
+<p class="auth-alternative">New to Capacity Connect? <a href="{% url 'accounts:register' %}">Create an account</a></p>
+<p class="auth-admin-option"><span>Administrator?</span> <a href="{% url 'accounts:admin_login' %}">Use administrator sign in</a></p>
+{% endif %}
+{% endblock %}

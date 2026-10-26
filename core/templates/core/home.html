@@ -1,0 +1,129 @@
+{% extends "core/base.html" %}
+
+{% block title %}Capacity Connect | Learn. Grow. Connect.{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container hero-grid">
+        <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-dot" aria-hidden="true"></span> A better way to grow together</div>
+            <h1>Build skills that move <span>everyone</span> forward.</h1>
+            <p class="hero-description">Learning should open doors, not add to your to-do list. Bring your people, programs, and progress together in one place.</p>
+            <div class="hero-actions" id="get-started">
+                <a class="button button-primary" href="{% url 'core:course_list' %}">Explore courses <span aria-hidden="true">↗</span></a>
+                <a class="text-link" href="#about">See how it works <span aria-hidden="true">→</span></a>
+            </div>
+            <div class="hero-proof">
+                <div class="avatar-stack" aria-hidden="true">
+                    <span class="avatar avatar-one">A</span>
+                    <span class="avatar avatar-two">J</span>
+                    <span class="avatar avatar-three">M</span>
+                    <span class="avatar avatar-four">+</span>
+                </div>
+                <p><strong>Growing, together.</strong><br>A shared space for every kind of learner.</p>
+            </div>
+        </div>
+        <div class="hero-art" aria-label="Illustration of a learner reaching new milestones">
+            <div class="art-orbit orbit-one"></div>
+            <div class="art-orbit orbit-two"></div>
+            <div class="art-sun" aria-hidden="true"></div>
+            <div class="art-card art-card-top"><span class="tiny-icon">✳</span><span>Small steps,<br>big momentum.</span></div>
+            <div class="art-path" aria-hidden="true"></div>
+            <div class="art-person" aria-hidden="true">
+                <span class="person-head"></span><span class="person-body"></span>
+                <span class="person-arm"></span><span class="person-leg"></span>
+            </div>
+            <div class="art-step step-one" aria-hidden="true"></div>
+            <div class="art-step step-two" aria-hidden="true"></div>
+            <div class="art-step step-three" aria-hidden="true"></div>
+            <div class="art-badge"><span aria-hidden="true">✓</span> New skills unlocked</div>
+            <span class="art-star star-one" aria-hidden="true">✳</span>
+            <span class="art-star star-two" aria-hidden="true">✦</span>
+        </div>
+    </div>
+    <div class="hero-bottom container">
+        <span>LEARNING THAT FITS REAL LIFE</span>
+        <span class="scroll-note"><span aria-hidden="true">↓</span> Scroll to explore</span>
+    </div>
+</section>
+
+<section class="intro-section section-pad" id="learning">
+    <div class="container intro-grid">
+        <div>
+            <p class="section-kicker">A connected approach</p>
+            <h2>Make learning part of <span>the work.</span></h2>
+        </div>
+        <div class="intro-copy">
+            <p>Capacity Connect brings learning and development into focus. Give people a clear path to build useful skills, while your organization gets a better view of growth across teams.</p>
+            <a class="text-link" href="{% url 'core:course_list' %}">Discover what you can learn <span aria-hidden="true">→</span></a>
+        </div>
+    </div>
+    <div class="container value-grid">
+        <article class="value-card">
+            <span class="value-number">01</span><span class="value-icon icon-lilac" aria-hidden="true">↗</span>
+            <h3>Learning with direction</h3><p>Bring courses and development goals together so every next step feels clear.</p>
+        </article>
+        <article class="value-card">
+            <span class="value-number">02</span><span class="value-icon icon-yellow" aria-hidden="true">◎</span>
+            <h3>Progress you can see</h3><p>Make achievements visible and help learners keep their momentum going.</p>
+        </article>
+        <article class="value-card">
+            <span class="value-number">03</span><span class="value-icon icon-green" aria-hidden="true">⌘</span>
+            <h3>Growth, shared</h3><p>Give teams and trainers one welcoming space to learn, teach, and grow.</p>
+        </article>
+    </div>
+</section>
+
+<section class="course-feature-section section-pad" id="featured-courses">
+    <div class="container">
+        <div class="section-heading">
+            <div><p class="section-kicker">Keep growing</p><h2>Featured <span>courses.</span></h2></div>
+            <p>{{ course_count }} published course{{ course_count|pluralize }} across {{ category_count }} learning categor{{ category_count|pluralize:"y,ies" }}.</p>
+        </div>
+        {% if featured_courses %}
+        <div class="course-grid">
+            {% for course in featured_courses %}
+            <article class="course-card">
+                <div class="course-card-meta"><span>{{ course.category }}</span><span>{{ course.get_level_display }}</span></div>
+                <h3><a href="{% url 'core:course_detail' course.slug %}">{{ course.title }}</a></h3>
+                <p>{{ course.summary }}</p>
+                <div class="course-card-bottom"><span>{{ course.available_slots }} seat{{ course.available_slots|pluralize }} available</span><a href="{% url 'core:course_detail' course.slug %}" aria-label="View {{ course.title }}">View course <span aria-hidden="true">→</span></a></div>
+            </article>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="course-empty">
+            <h3>Your learning journey starts here.</h3>
+            <p>Featured courses will appear here as soon as an administrator publishes them.</p>
+        </div>
+        {% endif %}
+        <a class="text-link course-all-link" href="{% url 'core:course_list' %}">Browse all courses <span aria-hidden="true">→</span></a>
+    </div>
+</section>
+
+<section class="topics-section section-pad" id="categories">
+    <div class="container">
+        <div class="section-heading">
+            <div><p class="section-kicker">Room to grow</p><h2>Skills for the <span>next step.</span></h2></div>
+            <p>Explore the building blocks for a more capable, connected team.</p>
+        </div>
+        <div class="topic-grid">
+            {% for category in categories %}
+            <article class="topic-card topic-{{ category.tone }}">
+                <span class="topic-icon" aria-hidden="true">{{ category.icon }}</span>
+                <div><h3>{{ category.name }}</h3><p>{{ category.description }}</p></div>
+                <a href="#get-started" class="topic-arrow" aria-label="Explore {{ category.name }}">↗</a>
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<section class="closing-section">
+    <div class="container closing-inner">
+        <div><p class="section-kicker">Your next chapter starts here</p><h2>Ready to make room<br>for <span>what's next?</span></h2></div>
+        <a class="button button-light" href="{% url 'core:course_list' %}">Let's get growing <span aria-hidden="true">↗</span></a>
+        <span class="closing-decoration" aria-hidden="true">✳</span>
+    </div>
+</section>
+{% endblock %}

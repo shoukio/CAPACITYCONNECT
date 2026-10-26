@@ -1,0 +1,68 @@
+{% extends "core/base.html" %}
+
+{% block title %}{{ course.title }} | Capacity Connect{% endblock %}
+
+{% block content %}
+<section class="course-detail-section section-pad">
+    <div class="container">
+        <a class="text-link course-back-link" href="{% url 'core:course_list' %}"><span aria-hidden="true">←</span> All courses</a>
+        <article class="course-detail">
+            <div class="course-card-meta"><span>{{ course.category }}</span><span>{{ course.get_level_display }}</span></div>
+            <h1>{{ course.title }}</h1>
+            <p class="course-detail-summary">{{ course.summary }}</p>
+            <div class="course-detail-facts">
+                <span>{{ course.duration_hours }} hour{{ course.duration_hours|pluralize }}</span>
+                <span>{{ course.current_enrollments }} enrolled</span>
+                <span>{{ course.available_slots }} seat{{ course.available_slots|pluralize }} available</span>
+                {% if course.is_featured %}<span>Featured course</span>{% endif %}
+            </div>
+            <div class="course-description">{{ course.description|linebreaks }}</div>
+            <section class="course-lessons" aria-labelledby="course-lessons-heading">
+                <div class="course-lessons-heading">
+                    <div>
+                        <p class="section-kicker">Course contents</p>
+                        <h2 id="course-lessons-heading">Your learning path</h2>
+                    </div>
+                    <span>{{ course.lessons.count }} lesson{{ course.lessons.count|pluralize }}</span>
+                </div>
+                {% if course.lessons.all %}
+                <ol class="lesson-list">
+                    {% for lesson in course.lessons.all %}
+                    <li class="lesson-list-item">
+                        <span class="lesson-number">{{ forloop.counter|stringformat:"02d" }}</span>
+                        <div class="lesson-list-copy">
+                            <h3>{{ lesson.title }}</h3>
+                            <p>{{ lesson.duration_minutes }} min read</p>
+                        </div>
+                        {% if can_view_lessons %}
+                        <a class="lesson-open-link" href="{% url 'core:lesson_detail' course.slug lesson.pk %}">Open lesson <span aria-hidden="true">→</span></a>
+                        {% else %}
+                        <span class="lesson-locked" aria-label="Enroll to access this lesson">Enroll to access</span>
+                        {% endif %}
+                    </li>
+                    {% endfor %}
+                </ol>
+                {% else %}
+                <div class="lesson-empty">Course lessons are being prepared.</div>
+                {% endif %}
+            </section>
+            <div class="course-enrollment-action">
+                {% if is_enrolled %}
+                <p class="enrollment-status">You’re enrolled in this course.</p>
+                {% elif user.is_authenticated and user.profile.role == "learner" %}
+                    {% if course.available_slots %}
+                    <form method="post" action="{% url 'core:course_enroll' course.slug %}">
+                        {% csrf_token %}
+                        <button class="button button-primary" type="submit">Enroll in this course <span aria-hidden="true">↗</span></button>
+                    </form>
+                    {% else %}
+                    <p class="enrollment-status">This course is full. No seats are currently available.</p>
+                    {% endif %}
+                {% elif not user.is_authenticated %}
+                <a class="button button-primary" href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}">Sign in to enroll <span aria-hidden="true">↗</span></a>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends "core/dashboard_base.html" %}
+
+{% block title %}Learner dashboard | Capacity Connect{% endblock %}
+{% block dashboard_heading %}Learner dashboard{% endblock %}
+
+{% block dashboard_content %}
+<div class="dashboard-welcome">
+    <p class="section-kicker">Welcome, {{ user.first_name|default:user.get_username }}</p>
+    <h2>Your growth, at your pace.</h2>
+    <p>Find your assigned learning and keep building skills at your own pace.</p>
+    <a class="button button-primary" href="{% url 'core:course_list' %}">Explore courses <span aria-hidden="true">↗</span></a>
+</div>
+<section class="dashboard-panel" aria-labelledby="learning-overview-title">
+    <div class="dashboard-panel-heading">
+        <div><p class="section-kicker">Your learning</p><h2 id="learning-overview-title">My courses</h2></div>
+    </div>
+    {% if enrollments %}
+    <div class="course-grid">
+        {% for enrollment in enrollments %}
+        <article class="course-card">
+            <div class="course-card-meta">
+                <span>{{ enrollment.course.category }}</span>
+                <span>{{ enrollment.course.get_level_display }}</span>
+            </div>
+            <h2><a href="{% url 'core:course_detail' enrollment.course.slug %}">{{ enrollment.course.title }}</a></h2>
+            <p>{{ enrollment.course.summary }}</p>
+            <div class="course-card-bottom">
+                <span>Enrolled {{ enrollment.enrolled_at|date:"M j, Y" }}</span>
+                <a href="{% url 'core:course_detail' enrollment.course.slug %}">Open course <span aria-hidden="true">→</span></a>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="dashboard-empty">
+        <span class="dashboard-empty-icon" aria-hidden="true">▤</span>
+        <h3>No courses assigned yet.</h3>
+        <p>Browse the catalogue and enroll yourself, or ask your administrator to assign a course. Assigned courses will appear here.</p>
+        <a class="text-link" href="{% url 'core:course_list' %}">View the course catalogue <span aria-hidden="true">→</span></a>
+    </div>
+    {% endif %}
+</section>
+{% endblock %}

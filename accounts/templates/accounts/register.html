@@ -1,0 +1,5 @@
+{% extends "accounts/auth_base.html" %}
+
+{% block auth_links %}
+<p class="auth-alternative">Already have an account? <a href="{% url 'accounts:login' %}">Sign in</a></p>
+{% endblock %}
